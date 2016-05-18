@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,9 +34,9 @@ public class HistoryTest {
         String json2 = mapper.writeValueAsString(bean);
 
 
-        JsonNode patch = JsonDiff.asJson(mapper.readTree(json1), mapper.readTree(json2));
+        List<JsonNode> patches = new ArrayList<>();
 
-        System.out.println("delta1 " + patch.asText());
+        patches.add(JsonDiff.asJson(mapper.readTree(json1), mapper.readTree(json2)));
 
         a = new A();
         a.setValue("a second value");
@@ -42,19 +44,26 @@ public class HistoryTest {
 
         String json3 = mapper.writeValueAsString(bean);
 
-        JsonNode patch2 = JsonDiff.asJson(mapper.readTree(json2), mapper.readTree(json3));
-
-        System.out.println("delta2 " + patch2.asText());
+        patches.add(JsonDiff.asJson(mapper.readTree(json2), mapper.readTree(json3)));
 
 
+        for(int i=0;i<10000;i++) {
+            String prevJson = mapper.writeValueAsString(bean);
+            bean.setIntValue(i);
+            bean.setbValue("b" +i);
+            bean.setStringValue("stringValue" + i);
+            String json = mapper.writeValueAsString(bean);
+            patches.add(JsonDiff.asJson(mapper.readTree(prevJson), mapper.readTree(json)));
+        }
 
         JsonNode original = mapper.readTree(json1);
+        JsonNode prevNode = original;
+        for(JsonNode patch: patches) {
+            JsonNode patched = JsonPatch.apply(patch, prevNode);
+            prevNode = patched;
+        }
 
-        JsonNode patched1 = JsonPatch.apply(patch, original);
-
-        JsonNode patched2 = JsonPatch.apply(patch2, patched1);
-
-        Bean bean2 = mapper.treeToValue(patched2, Bean.class);
+        Bean bean2 = mapper.treeToValue(prevNode, Bean.class);
 
         assertEquals(bean, bean2);
 
