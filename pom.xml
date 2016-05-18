@@ -36,6 +36,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <commons.version>2.5</commons.version>
+        <commons.collections4.version>4.1</commons.collections4.version>
+        <jackson.version>2.5.4</jackson.version>
+        <slf4j.version>1.7.14</slf4j.version>
+        <junit.version>4.12</junit.version>
+        <guava.version>19.0</guava.version>
     </properties>
 
     <build>
@@ -77,6 +83,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -113,42 +120,46 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
+            -->
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.3.2</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.3.2</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <scope>test</scope>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>${commons.version}</version>
         </dependency>
         <dependency>
             <scope>test</scope>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.0</version>
+            <version>${commons.collections4.version}</version>
         </dependency>
     </dependencies>
+
+    <!--
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -159,4 +170,5 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+    -->
 </project>
