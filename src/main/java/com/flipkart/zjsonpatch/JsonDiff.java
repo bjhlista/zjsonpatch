@@ -17,9 +17,11 @@ import java.util.*;
  * User: gopi.vishwakarma
  * Date: 30/07/14
  */
-public class JsonDiff {
+public final class JsonDiff {
 
     public static final EncodePathFunction ENCODE_PATH_FUNCTION = new EncodePathFunction();
+
+    private JsonDiff() {}
 
     private final static class EncodePathFunction implements Function<Object, String> {
         @Override
